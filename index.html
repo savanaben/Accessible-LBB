@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prototype of screen reader NAEP look back button</title>
+    <style>
+        /* Tab Styles */
+        .tabs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+#modalContent {
+outline-color: black;
+outline-offset: 4px;
+}
+
+#activityButton {
+    background: rgb(217, 244, 255);
+    border: 2px solid rgb(36 116 214);
+    border-radius: 4px;
+    color:  rgb(16, 93, 188);
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 100;
+    outline-offset: 4px;
+}
+
+#activityButton[aria-expanded="true"] {
+    background: rgb(36 116 214);
+    color: white;
+    border: 2px solid rgb(255, 255, 255);
+}
+        
+        .tabs {
+            font-family: "lucida grande", sans-serif;
+            z-index: 1000;
+        }
+
+        [role="tablist"] {
+            min-width: 100%;
+            z-index: -1;
+        }
+
+        [role="tab"],
+        [role="tab"]:focus,
+        [role="tab"]:hover {
+            display: inline-block;
+            position: relative;
+           
+            top: 2px;
+            margin: 0;
+            margin-top: 4px;
+            padding: 3px 3px 4px;
+            border: 1px solid hsl(219deg 1% 72%);
+            border-bottom: 2px solid hsl(219deg 1% 72%);
+            border-radius: 5px 5px 0 0;
+            background: hsl(220deg 20% 94%);
+            outline: none;
+            font-weight: bold;
+            max-width: 22%;
+            overflow: hidden;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        [role="tab"][aria-selected="true"] {
+            padding: 2px 2px 4px;
+            margin-top: 0;
+            border-width: 2px;
+            border-top-width: 6px;
+            border-top-color: rgb(36 116 214);
+            border-bottom-color: hsl(220deg 43% 99%);
+            background: hsl(220deg 43% 99%);
+        }
+
+        [role="tab"][aria-selected="false"] {
+            border-bottom: 1px solid hsl(219deg 1% 72%);
+        }
+
+        [role="tab"] span.focus {
+            display: inline-block;
+            margin: 2px;
+            padding: 4px 6px;
+        }
+
+        [role="tab"]:hover span.focus,
+        [role="tab"]:focus span.focus,
+        [role="tab"]:active span.focus {
+            padding: 2px 4px;
+            border: 2px solid rgb(0, 0, 0);
+            border-radius: 3px;
+        }
+
+        [role="tabpanel"] {
+            padding: 5px;
+            border: 2px solid hsl(219deg 1% 72%);
+            border-radius: 0 5px 5px;
+            background: hsl(220deg 43% 99%);
+            min-height: 10em;
+            overflow: auto;
+        }
+
+        [role="tabpanel"].is-hidden {
+            display: none;
+        }
+
+        /* Modal Styles */
+
+        .modal [role="region"] {
+    outline: none;
+}
+
+.modal [role="region"]:focus {
+    outline: 2px solid rgb(36 116 214);
+    outline-offset: -2px;
+}
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 500px;
+        }
+
+        .highlight {
+            background-color: yellow;
+            outline: 2px solid orange;
+        }
+
+        .modal-overlay.is-hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Main content with tabs -->
+    <div>
+        <div class="tabs-header">
+            <button id="activityButton" 
+                    aria-label="Toggle Activity panel" 
+                    aria-expanded="false"
+                    aria-controls="modalContent">
+                Activity
+            </button>
+        </div>
+       
+        <div role="tablist" aria-label="Content sections" aria-labelledby="tablist-1" class="automatic">
+            <button id="tab-1" type="button" role="tab" aria-selected="true" aria-controls="tabpanel-1">
+                <span class="focus">Passage 1</span>
+            </button>
+            <button id="tab-2" type="button" role="tab" aria-selected="false" aria-controls="tabpanel-2">
+                <span class="focus">Passage 2</span>
+            </button>
+            <button id="tab-3" type="button" role="tab" aria-selected="false" aria-controls="tabpanel-3">
+                <span class="focus">Organizer</span>
+            </button>
+        </div>
+
+        <div id="tabpanel-1" role="tabpanel" tabindex="0" aria-labelledby="tab-1">
+            <h2>Passage 1</h2>
+            <p>Additional content for the passage goes here. here's some starter text in this passage.</p>
+            <p>Additional content for the passage goes here.</p>
+        </div>
+
+        <div id="tabpanel-2" role="tabpanel" tabindex="0" aria-labelledby="tab-2" class="is-hidden">
+            <h2>Passage 2</h2>
+            <p>Earlier content for the second passage.</p>
+            <div id="highlightTarget">
+                <h3>subtitle</h3>
+                <p>Some paragraph text that will be highlighted in addition to the subtitle.</p>
+           </div>
+           <p>latter content for the second passage.</p>
+        </div>
+
+        <div id="tabpanel-3" role="tabpanel" tabindex="0" aria-labelledby="tab-3" class="is-hidden">
+            <h2>Organizer</h2>
+            <p>Content for the Organizer.</p>
+        </div>
+    </div>
+
+
+
+    <!-- Modal -->
+<!-- Update the modal markup -->
+<div id="modalOverlay" class="modal-overlay is-hidden">
+    <div class="modal" 
+          
+       
+       >
+        <!-- Add region role and label -->
+        <div id="modalContent" 
+        role="region" 
+        aria-label="Activity panel"
+        tabindex="0">
+       <p id="modalDescription">
+           In the 
+           <button id="lookBackButton" 
+           aria-description="((Select this to go to the second paragraph highlight))">
+           second paragraph
+           </button>
+            of passage 2, the author talks about some amazing stuff.
+       </p>
+       <p>
+       Here's another sentence, like the question stem.
+    </p>
+   </div>
+
+
+</div>
+</div>
+
+
+
+    <script>
+        'use strict';
+        
+        // Tab functionality
+        class TabsAutomatic {
+            constructor(groupNode) {
+                this.tablistNode = groupNode;
+                this.tabs = [];
+                this.firstTab = null;
+                this.lastTab = null;
+        
+                this.tabs = Array.from(this.tablistNode.querySelectorAll('[role=tab]'));
+                this.tabpanels = [];
+        
+                for (var i = 0; i < this.tabs.length; i += 1) {
+                    var tab = this.tabs[i];
+                    var tabpanel = document.getElementById(tab.getAttribute('aria-controls'));
+        
+                    tab.tabIndex = -1;
+                    tab.setAttribute('aria-selected', 'false');
+                    this.tabpanels.push(tabpanel);
+        
+                    tab.addEventListener('keydown', this.onKeydown.bind(this));
+                    tab.addEventListener('click', this.onClick.bind(this));
+        
+                    if (!this.firstTab) {
+                        this.firstTab = tab;
+                    }
+                    this.lastTab = tab;
+                }
+        
+                this.setSelectedTab(this.firstTab, false);
+            }
+        
+            // ... [Previous tab methods remain the same] ...
+            setSelectedTab(currentTab, setFocus) {
+                if (typeof setFocus !== 'boolean') {
+                    setFocus = true;
+                }
+                for (var i = 0; i < this.tabs.length; i += 1) {
+                    var tab = this.tabs[i];
+                    if (currentTab === tab) {
+                        tab.setAttribute('aria-selected', 'true');
+                        tab.removeAttribute('tabindex');
+                        this.tabpanels[i].classList.remove('is-hidden');
+                        if (setFocus) {
+                            tab.focus();
+                        }
+                    } else {
+                        tab.setAttribute('aria-selected', 'false');
+                        tab.tabIndex = -1;
+                        this.tabpanels[i].classList.add('is-hidden');
+                    }
+                }
+            }
+        
+            setSelectedToPreviousTab(currentTab) {
+                var index;
+                if (currentTab === this.firstTab) {
+                    this.setSelectedTab(this.lastTab);
+                } else {
+                    index = this.tabs.indexOf(currentTab);
+                    this.setSelectedTab(this.tabs[index - 1]);
+                }
+            }
+        
+            setSelectedToNextTab(currentTab) {
+                var index;
+                if (currentTab === this.lastTab) {
+                    this.setSelectedTab(this.firstTab);
+                } else {
+                    index = this.tabs.indexOf(currentTab);
+                    this.setSelectedTab(this.tabs[index + 1]);
+                }
+            }
+        
+            onKeydown(event) {
+                var tgt = event.currentTarget,
+                    flag = false;
+        
+                switch (event.key) {
+                    case 'ArrowLeft':
+                        this.setSelectedToPreviousTab(tgt);
+                        flag = true;
+                        break;
+        
+                    case 'ArrowRight':
+                        this.setSelectedToNextTab(tgt);
+                        flag = true;
+                        break;
+        
+                    case 'Home':
+                        this.setSelectedTab(this.firstTab);
+                        flag = true;
+                        break;
+        
+                    case 'End':
+                        this.setSelectedTab(this.lastTab);
+                        flag = true;
+                        break;
+                }
+        
+                if (flag) {
+                    event.stopPropagation();
+                    event.preventDefault();
+                }
+            }
+        
+            onClick(event) {
+                this.setSelectedTab(event.currentTarget);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+    // Initialize tabs
+    const tablists = document.querySelectorAll('[role=tablist].automatic');
+    for (let i = 0; i < tablists.length; i++) {
+        new TabsAutomatic(tablists[i]);
+    }
+
+    // Modal activity panel
+    const activityButton = document.getElementById('activityButton');
+    const modal = document.getElementById('modalOverlay');
+    const modalContent = document.getElementById('modalContent');
+    const lookBackBtn = document.getElementById('lookBackButton');
+    const mainContent = document.querySelector('.tabs');
+
+    // Get all focusable elements in modal
+    const getFocusableElements = () => {
+        return modal.querySelectorAll(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+    };
+
+    // Function to manage focus trap
+    const manageFocus = (isModalOpen) => {
+        const allFocusableElements = document.querySelectorAll(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"]), [role="tabpanel"]'
+        );
+
+        if (isModalOpen) {
+            // Store original tabindex values and make everything unfocusable
+            allFocusableElements.forEach(el => {
+                if (el !== activityButton && !modal.contains(el)) {
+                    // Store the original tabindex, defaulting to 0 for elements that need it
+                    const originalTabIndex = el.hasAttribute('tabindex') ? el.getAttribute('tabindex') : '0';
+                    el.setAttribute('data-original-tabindex', originalTabIndex);
+                    el.tabIndex = -1;
+                    el.setAttribute('aria-hidden', 'true');
+                }
+            });
+        } else {
+            // Restore original tabindex values
+            allFocusableElements.forEach(el => {
+                const originalTabIndex = el.getAttribute('data-original-tabindex');
+                if (originalTabIndex !== null) {
+                    if (originalTabIndex === '0' && !el.hasAttribute('tabindex')) {
+                        // If it didn't have a tabindex before, remove it
+                        el.removeAttribute('tabindex');
+                    } else {
+                        el.tabIndex = originalTabIndex;
+                    }
+                    el.removeAttribute('data-original-tabindex');
+                    el.removeAttribute('aria-hidden');
+                }
+            });
+        }
+    };
+
+    // Add this new function for focus trapping
+    const handleTabKey = (e) => {
+        if (e.key === 'Tab' && !modal.classList.contains('is-hidden')) {
+            // Get all focusable elements in modal plus activity button
+            const focusableElements = [
+                activityButton,
+                modalContent,
+                ...modal.querySelectorAll('button:not(#activityButton)')
+            ];
+            
+            const firstFocusable = focusableElements[0];
+            const lastFocusable = focusableElements[focusableElements.length - 1];
+
+            // If shift + tab
+            if (e.shiftKey) {
+                if (document.activeElement === firstFocusable) {
+                    e.preventDefault();
+                    lastFocusable.focus();
+                }
+            } 
+            // If just tab
+            else {
+                if (document.activeElement === lastFocusable) {
+                    e.preventDefault();
+                    firstFocusable.focus();
+                }
+            }
+        }
+    };
+
+
+    // Enhanced toggle panel functionality
+    const togglePanel = () => {
+        const isExpanded = activityButton.getAttribute('aria-expanded') === 'true';
+        
+        if (isExpanded) {
+            // Close panel
+            modal.classList.add('is-hidden');
+            activityButton.setAttribute('aria-expanded', 'false');
+            manageFocus(false);
+            document.removeEventListener('keydown', handleTabKey); // Remove trap
+            activityButton.focus();
+        } else {
+            // Open panel
+            modal.classList.remove('is-hidden');
+            activityButton.setAttribute('aria-expanded', 'true');
+            manageFocus(true);
+            document.addEventListener('keydown', handleTabKey); // Add trap
+            modalContent.focus();
+        }
+    };
+
+    // Event listeners
+    activityButton.addEventListener('click', togglePanel);
+
+    // Handle escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && activityButton.getAttribute('aria-expanded') === 'true') {
+            togglePanel();
+        }
+    });
+
+    // Look Back Button functionality
+    lookBackBtn.addEventListener('click', () => {
+        // Remove any existing highlights first
+        const existing = document.querySelector('.highlight-region');
+        if (existing) {
+            existing.removeAttribute('role');
+            existing.removeAttribute('aria-label');
+            existing.classList.remove('highlight', 'highlight-region');
+        }
+
+        // Find target elements before closing modal
+        const highlightTarget = document.getElementById('highlightTarget');
+        const targetPanel = highlightTarget.closest('[role="tabpanel"]');
+        const targetTab = document.getElementById(targetPanel.getAttribute('aria-labelledby'));
+        
+        // Close modal
+        modal.classList.add('is-hidden');
+        activityButton.setAttribute('aria-expanded', 'false');
+        manageFocus(false);  // Make sure to restore focus management when closing via look-back
+        
+        // Activate the tab containing the highlight
+        const tabsInstance = Array.from(document.querySelectorAll('[role=tablist].automatic'))
+            .map(tablist => new TabsAutomatic(tablist))
+            .find(tabs => tabs.tabs.includes(targetTab));
+        
+        if (tabsInstance) {
+            tabsInstance.setSelectedTab(targetTab);
+        }
+
+        // Add new highlight
+        highlightTarget.classList.add('highlight', 'highlight-region');
+        highlightTarget.setAttribute('role', 'region');
+        highlightTarget.setAttribute('aria-label', 'Highlighted content');
+        highlightTarget.tabIndex = -1;
+        highlightTarget.focus();
+    });
+});
+        </script>
+        </body>
+        </html>
