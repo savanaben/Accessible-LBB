@@ -41,9 +41,33 @@ outline-offset: 4px;
         }
 
         [role="tablist"] {
-            min-width: 100%;
-            z-index: -1;
+            display: flex;  /* Use flexbox */
+            overflow-x: auto;  /* Enable horizontal scroll */
+            scrollbar-width: thin;
+            -ms-overflow-style: -ms-autohiding-scrollbar;
+            scroll-behavior: smooth;
+            /* Remove min-width and max-content width */
+            padding-bottom: 4px; /* Space for scrollbar */
+            position: relative;
+            margin: 0 0 0 0px;
         }
+
+        [role="tablist"] [role="tab"]:first-child {
+            margin-left: 8px;  /* Adjust value as needed */
+        }
+
+
+        [role="tablist"]::after {
+        content: '';
+        position: absolute;
+        margin: 0 0 0 0px;
+        bottom: 2px; /* Match the padding-bottom */
+        left: 0px;
+        right: 0px;
+        height: 1px; /* Border thickness */
+        background: hsl(219deg 1% 72%); /* Match your tab border color */
+        z-index: -1; /* Place behind tabs */
+         }
 
         [role="tab"],
         [role="tab"]:focus,
@@ -61,8 +85,6 @@ outline-offset: 4px;
             background: hsl(220deg 20% 94%);
             outline: none;
             font-weight: bold;
-            max-width: 22%;
-            overflow: hidden;
             text-align: left;
             cursor: pointer;
         }
@@ -96,8 +118,7 @@ outline-offset: 4px;
         }
 
         [role="tabpanel"] {
-            padding: 5px;
-            border: 2px solid hsl(219deg 1% 72%);
+            padding: 0 1rem 1rem 1rem;
             border-radius: 0 5px 5px;
             background: hsl(220deg 43% 99%);
             min-height: 10em;
@@ -133,26 +154,45 @@ outline-offset: 4px;
 
         .modal {
             background: white;
-            padding: 20px;
-            border-radius: 5px;
-            max-width: 500px;
+            padding: 1.5rem;
+            border-radius: 8px;
+            max-width: 600px;
         }
 
         .highlight {
-            background-color: yellow;
-            outline: 2px solid orange;
+            background-color: rgb(247, 197, 255);
+                 text-decoration: underline;
+                 text-underline-offset: 2px;
+                 text-decoration-color: rgb(112, 0, 138);
+                 outline: none;
         }
 
         .modal-overlay.is-hidden {
             display: none;
         }
+
+        html {
+            font-size: 24px;
+            font-family: sans-serif;
+            line-height: 1.35;
+        }
+
+        body {
+            margin: 0px;
+        }
+
+        button {
+            font-size: 24px;
+            font-family: sans-serif;
+        }
+
     </style>
 </head>
 <body>
     <!-- Main content with tabs -->
     <div>
         <div class="tabs-header">
-            <button id="activityButton" 
+            <button id="activityButton" style="margin: 8px;" 
                     aria-label="Toggle Activity panel" 
                     aria-expanded="false"
                     aria-controls="modalContent">
@@ -174,56 +214,162 @@ outline-offset: 4px;
 
         <div id="tabpanel-1" role="tabpanel" tabindex="0" aria-labelledby="tab-1">
             <h2>Passage 1</h2>
-            <p>Additional content for the passage goes here. here's some starter text in this passage.</p>
-            <p>Additional content for the passage goes here.</p>
+            <p>This tab is here just to demo that there may be more tabs in other examples with Look back buttons.</p>
         </div>
 
         <div id="tabpanel-2" role="tabpanel" tabindex="0" aria-labelledby="tab-2" class="is-hidden">
-            <h2>Passage 2</h2>
-            <p>Earlier content for the second passage.</p>
-            <div id="highlightTarget">
+            <h1>Growing Vertical</h1>
+            <h3>By Mark Fischetti</h3>
+            <p>Cultivating crops in downtown skyscrapers might save bushels of energy and provide city dwellers with distinctively fresh food.</p>
+            <p>Why not grow grains, vegetables and fruits right where the expanding crowds of consumers are: in the middle of a city, inside a tall glass building? Poultry and pork could be reared there, too. A vertical farm would drastically reduce the fossil-fuel use and emissions associated with farm machinery and trucking, as well as the spread of fertilizer and its runoff. Crops could grow and be harvested year-round instead of at the end of one season, multiplying annual yield by at least four times. Urban agriculture could also convert municipal wastewater into irrigation water, reducing a city’s refuse problem. And consumers would get the freshest food possible, without pesticides.
+            </p>
+            <p>A fanciful notion only a few years ago, vertical farming has captured the attention of large developers that are planning more sustainable cities, such as the multinational firm Arup, and municipalities that are looking to reduce environmental damage and the cost of treating wastewater. Although growing crops in downtown skyscrapers may seem strange, Dickson Despommier of Columbia University, who has championed the movement, says the practice makes perfect sense. “When it’s 98 degrees and 80 percent humidity outside, we humans sit inside a controlled environment that is 72 degrees and 25 percent humidity,” he says. “We’ve done that for our homes and offices. Why can’t we do that for our crops? Well, we can.”
+            </p>
+            <p>Proponents also say we must. If, as demographers project, the world’s population rises from six billion to nine billion by 2050—almost entirely through a net addition to urban populations—the planet will need to cultivate a billion more hectares of arable land, roughly the area of Brazil. Researchers say that much arable land simply doesn’t exist.
+            </p>
+            <p>The science for indoor farming does exist. Agronomists have developed crops that thrive in lightweight, engineered soils such as vermiculite or in water (hydroponics). NASA has devised crops that grow by dangling in air infused with a mist of water vapor and nutrients (aeroponics). Large greenhouses in several countries, notably the Netherlands, are producing substantial yields using these techniques. According to Despommier, a 30-story farm that covered a city block could feed 50,000 people year-round.
+            </p>
+            <p>Skeptics worry that indoor crops would have to be genetically modified to thrive, but Despommier says such alteration is unnecessary: “None of these crops has to be modified further for life indoors. In fact, they’ll do much better because we can match their growth characteristics with temperature and humidity conditions and nutrition profiles.”
+            </p>
+            <p>Engineering that environment itself is the greater challenge. Providing sufficient light and water is relatively easy. What’s harder is controlling the indoor flow of air and nutrients, efficiently recycling water and devising high-tech incinerators that burn plant waste to produce energy that <span id="highlightTarget">augments</span> wind and solar power.</p>
+            <p>Operating costs are an issue, of course, including winter heating and harvesting. But the fertilizer and fuel consumed for traditional farming is expensive, too; witness the run-up in food prices this year. Governments also pay out billions of dollars annually to rescue farmers who lose crops to drought and floods such as those that ravaged the Midwest this past June.
+            </p>
+            <p>Although real estate in cities would seem too pricey for farming, Despommier’s grad­uate students surveyed New York City and found many abandoned buildings and lots where high-rise farms could sprout. “And they don’t all have to be big towers,” Despommier allows. “You can do this on the rooftops of hospitals and schools,” which would use the food in their own commissaries. “You can do this along the periphery but still within city limits. You can do this on open stretches of air force bases and airports and city islands.”
+            </p>
+            <p>Reducing a city’s wastewater burden is also attractive. New York City produces 1.4 billion gallons of liquid waste every day, according to city reports. This massive stream is simply thrown away—it is mixed with chlorine at 14 treatment plants and dumped into local waterways. Instead urban farms could reprocess wastewater for irrigation. Developers that are designing sustainable eco-cities are talking to Despommier about vertical farming for that reason as well as its other appealing promises of more environmentally sound food production. “I keep asking people, ‘What’s wrong with this picture?’ ” Despommier notes. “Once they think about it, they say, ‘Nothing.’ ”
+            </p>
+            <h2>Interview</h2>
+            <h3>Dickson Despommier: Growing crops indoors could serve the rich and poor.</h3>
+            <p> Dickson Despommier may seem an unlikely leader for a radical movement toward vertical farming. The affable microbiologist and trout fisherman spent 27 years at Columbia University investigating parasitic diseases. But when his grant money ran out, he began teaching medical students how environmental mechanisms, including agriculture, can spread pathogens. He realized one significant way to reduce pestilence would be to grow crops indoors under controlled conditions.</p>
+            <p>interview continues in original passage...</p>
+
+
+
+            
+            <!-- <div id="highlightTarget">
                 <h3>subtitle</h3>
                 <p>Some paragraph text that will be highlighted in addition to the subtitle.</p>
-           </div>
-           <p>latter content for the second passage.</p>
+           </div> -->
+    
+
         </div>
+
 
         <div id="tabpanel-3" role="tabpanel" tabindex="0" aria-labelledby="tab-3" class="is-hidden">
             <h2>Organizer</h2>
-            <p>Content for the Organizer.</p>
+            <p>This tab is here just to demo that there may be more tabs in other examples with Look back buttons.</p>
         </div>
     </div>
 
 
 
     <!-- Modal -->
-<!-- Update the modal markup -->
+<!-- there is an issue where removing the leading p causes a double-read of
+         the legend. idk how to prevent this. the code after the following
+           eliminates this issue but does not use fieldset semantics  -->
 <div id="modalOverlay" class="modal-overlay is-hidden">
-    <div class="modal" 
-          
-       
-       >
-        <!-- Add region role and label -->
+   <div class="modal">
+       <div id="modalContent" tabindex="0">
+          <p>Avatar dialog often goes here. They might give some background for the question to follow</p>
+            <fieldset>
+               <legend id="modalTitle">
+                   In Passage 2, the author states that plant waste could be burned to produce energy that
+                   <button id="lookBackButton" 
+                           aria-label="augments (click to highlight and go to this word in the passage)">
+                       augments
+                   </button>
+                   other power sources. This means that the energy produced from burning plants would 
+               </legend>
+               
+               <div class="radio-option">
+                   <input type="radio" 
+                          id="option1" 
+                          name="augmentMeaning" 
+                          value="1">
+                   <label for="option1">Add to the power provided by other sources</label>
+               </div>
+           
+               <div class="radio-option">
+                   <input type="radio" 
+                          id="option2" 
+                          name="augmentMeaning" 
+                          value="2">
+                   <label for="option2">Make other power sources unnecessary</label>
+               </div>
+           
+               <div class="radio-option">
+                   <input type="radio" 
+                          id="option3" 
+                          name="augmentMeaning" 
+                          value="3">
+                   <label for="option3">Gradually replace power from other sources</label>
+               </div>
+           
+               <div class="radio-option">
+                   <input type="radio" 
+                          id="option4" 
+                          name="augmentMeaning" 
+                          value="4">
+                   <label for="option4">Be less expensive than other power sources</label>
+               </div>
+           </fieldset>
+       </div>
+   </div>
+</div>
+
+
+
+<!-- <div id="modalOverlay" class="modal-overlay is-hidden"></div>
+    <div class="modal">
         <div id="modalContent" 
         role="region" 
         aria-label="Activity panel"
         tabindex="0">
-       <p id="modalDescription">
-           In the 
-           <button id="lookBackButton" 
-           aria-description="((Select this to go to the second paragraph highlight))">
-           second paragraph
-           </button>
-            of passage 2, the author talks about some amazing stuff.
-       </p>
-       <p>
-       Here's another sentence, like the question stem.
-    </p>
+       <div aria-labelledby="questionLabel">
+           <div id="questionLabel">
+               In Passage 2, the author states that plant waste could be burned to produce energy that
+               <button id="lookBackButton" 
+                       aria-label="augments (click to highlight and go to this word in the passage)">
+                   augments
+               </button>
+               other power sources. This means that the energy produced from burning plants would 
+           </div>
+           
+           <div class="radio-option">
+               <input type="radio" 
+                      id="option1" 
+                      name="augmentMeaning" 
+                      value="1">
+               <label for="option1">Add to the power provided by other sources</label>
+           </div>
+       
+           <div class="radio-option">
+               <input type="radio" 
+                      id="option2" 
+                      name="augmentMeaning" 
+                      value="2">
+               <label for="option2">Make other power sources unnecessary</label>
+           </div>
+       
+           <div class="radio-option">
+               <input type="radio" 
+                      id="option3" 
+                      name="augmentMeaning" 
+                      value="3">
+               <label for="option3">Gradually replace power from other sources</label>
+           </div>
+       
+           <div class="radio-option">
+               <input type="radio" 
+                      id="option4" 
+                      name="augmentMeaning" 
+                      value="4">
+               <label for="option4">Be less expensive than other power sources</label>
+           </div>
+       </div>
    </div>
-
-
 </div>
-</div>
+</div> -->
 
 
 
@@ -399,29 +545,32 @@ outline-offset: 4px;
     // Add this new function for focus trapping
     const handleTabKey = (e) => {
         if (e.key === 'Tab' && !modal.classList.contains('is-hidden')) {
-            // Get all focusable elements in modal plus activity button
+            e.preventDefault();
+            
+            // Get the selected radio or first radio as fallback
+            const selectedRadio = modal.querySelector('input[type="radio"]:checked') || 
+                                modal.querySelector('input[type="radio"]');
+            
             const focusableElements = [
                 activityButton,
                 modalContent,
-                ...modal.querySelectorAll('button:not(#activityButton)')
-            ];
+                lookBackBtn,
+                selectedRadio // Use selected radio or first radio
+            ].filter(el => el !== null);
             
             const firstFocusable = focusableElements[0];
             const lastFocusable = focusableElements[focusableElements.length - 1];
+            const currentIndex = focusableElements.indexOf(document.activeElement);
 
             // If shift + tab
             if (e.shiftKey) {
-                if (document.activeElement === firstFocusable) {
-                    e.preventDefault();
-                    lastFocusable.focus();
-                }
+                const nextIndex = currentIndex <= 0 ? focusableElements.length - 1 : currentIndex - 1;
+                focusableElements[nextIndex].focus();
             } 
             // If just tab
             else {
-                if (document.activeElement === lastFocusable) {
-                    e.preventDefault();
-                    firstFocusable.focus();
-                }
+                const nextIndex = currentIndex >= focusableElements.length - 1 ? 0 : currentIndex + 1;
+                focusableElements[nextIndex].focus();
             }
         }
     };

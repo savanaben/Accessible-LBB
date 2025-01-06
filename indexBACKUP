@@ -1,0 +1,52 @@
+    <!-- Modal -->
+<div id="modalOverlay" class="modal-overlay is-hidden">
+    <div class="modal">
+        <div id="modalContent" 
+        role="region" 
+        aria-label="Activity panel"
+        tabindex="0">
+       <div aria-labelledby="questionLabel">
+           <div id="questionLabel">
+               In Passage 2, the author states that plant waste could be burned to produce energy that
+               <button id="lookBackButton" 
+                       aria-label="augments (click to highlight and go to this word in the passage)">
+                   augments
+               </button>
+               other power sources. This means that the energy produced from burning plants would 
+           </div>
+           
+           <div class="radio-option">
+               <input type="radio" 
+                      id="option1" 
+                      name="augmentMeaning" 
+                      value="1">
+               <label for="option1">Add to the power provided by other sources</label>
+           </div>
+       
+           <div class="radio-option">
+               <input type="radio" 
+                      id="option2" 
+                      name="augmentMeaning" 
+                      value="2">
+               <label for="option2">Make other power sources unnecessary</label>
+           </div>
+       
+           <div class="radio-option">
+               <input type="radio" 
+                      id="option3" 
+                      name="augmentMeaning" 
+                      value="3">
+               <label for="option3">Gradually replace power from other sources</label>
+           </div>
+       
+           <div class="radio-option">
+               <input type="radio" 
+                      id="option4" 
+                      name="augmentMeaning" 
+                      value="4">
+               <label for="option4">Be less expensive than other power sources</label>
+           </div>
+       </div>
+   </div>
+</div>
+</div>
